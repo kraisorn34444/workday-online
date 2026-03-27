@@ -7,14 +7,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { db } from "./db"; 
 import { users } from "../drizzle/schema"; 
-import {
-  createWorkRecord,
-  getWorkRecordsByUser,
-  updateWorkRecord,
-  deleteWorkRecord,
-  addWorkRecordImage,
-  getWorkRecordImages,
-} from "./db2";
+
 
 export const appRouter = router({
   system: systemRouter,

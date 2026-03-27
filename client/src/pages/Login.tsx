@@ -1,66 +1,79 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
+// Login Page — Manus OAuth Integration
+// Design: Clean, centered login form with branding
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { getLoginUrl } from "@/const";
+import { useEffect } from "react";
+import { useLocation } from "wouter";
 
-  const loginMutation = trpc.auth.login.useMutation({
-    onSuccess: (data) => {
-      if (data.success) {
-        // ✅ ใช้ window.location เพื่อรีเฟรชหน้าและโหลด Cookie ใหม่
-        window.location.href = "/"; 
-      }
-    },
-    onError: (error) => {
-      alert(error.message || "Login ล้มเหลว");
+export default function Login() {
+  const { isAuthenticated, loading } = useAuth();
+  const [, navigate] = useLocation();
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      navigate("/");
     }
-  });
+  }, [isAuthenticated, loading, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    loginMutation.mutate({ username, password });
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-50">
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">กำลังโหลด...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white shadow-md rounded-lg w-96">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">เข้าสู่ระบบ</h1>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้งาน</label>
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-50 p-4">
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 border border-border">
+          {/* Logo/Branding */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl font-bold text-white">W</span>
+            </div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Work Online</h1>
+            <p className="text-muted-foreground">ระบบจัดการงานบริการลูกค้า</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+          {/* Description */}
+          <div className="mb-8">
+            <p className="text-sm text-muted-foreground text-center mb-4">
+              เข้าสู่ระบบเพื่อจัดการรายการงาน ปฏิทิน สถิติ และภาพประกอบ
+            </p>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded font-semibold hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
-            // ✅ เปลี่ยนจาก isLoading เป็น isPending ตามมาตรฐานใหม่
-            disabled={loginMutation.isPending}
+          {/* Login Button */}
+          <Button
+            onClick={() => (window.location.href = getLoginUrl())}
+            className="w-full h-11 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all"
           >
-            {loginMutation.isPending ? "กำลังตรวจสอบ..." : "เข้าสู่ระบบ"}
-          </button>
-        </form>
+            เข้าสู่ระบบด้วย Manus
+          </Button>
+
+          {/* Footer */}
+          <div className="mt-8 pt-6 border-t border-border">
+            <p className="text-xs text-muted-foreground text-center">
+              ระบบนี้มีการจำกัดสิทธิ์การเข้าถึง
+              <br />
+              เฉพาะผู้ที่ได้รับอนุญาตเท่านั้น
+            </p>
+          </div>
+        </div>
+
+        {/* Info Box */}
+        <div className="mt-6 bg-white/50 backdrop-blur rounded-lg p-4 border border-border/50">
+          <p className="text-xs text-muted-foreground text-center">
+            💡 หากคุณเป็นผู้ดูแลระบบ สามารถแก้ไข เพิ่ม และลบข้อมูลได้
+          </p>
+        </div>
       </div>
     </div>
   );
