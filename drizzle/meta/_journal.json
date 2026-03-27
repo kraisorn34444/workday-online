@@ -15,6 +15,13 @@
       "when": 1774489008859,
       "tag": "0001_brave_natasha_romanoff",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1774517690362,
+      "tag": "0002_blue_wild_pack",
+      "breakpoints": true
     }
   ]
 }

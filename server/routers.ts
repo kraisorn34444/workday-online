@@ -10,7 +10,7 @@ import {
   deleteWorkRecord,
   addWorkRecordImage,
   getWorkRecordImages,
-} from "./db";
+} from "./db2";
 
 export const appRouter = router({
   system: systemRouter,
