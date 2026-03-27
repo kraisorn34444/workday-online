@@ -6,7 +6,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { db } from "./db"; // ตรวจสอบ Path ให้ตรงกับไฟล์ db.ts
-import { users } from "./schema"; // ตรวจสอบ Path ให้ตรงกับไฟล์ schema.ts
+import { users } from "../drizzle/schema"; // ตรวจสอบ Path ให้ตรงกับไฟล์ schema.ts
 import {
   createWorkRecord,
   getWorkRecordsByUser,
